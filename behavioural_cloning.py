@@ -20,7 +20,7 @@ from openai_vpt.lib.tree_util import tree_map
 # Originally this code was designed for a small dataset of ~20 demonstrations per task.
 # The settings might not be the best for the full BASALT dataset (thousands of demonstrations).
 # Use this flag to switch between the two settings
-USING_FULL_DATASET = True
+USING_FULL_DATASET = False
 
 EPOCHS = 1 if USING_FULL_DATASET else 2
 # Needs to be <= number of videos
