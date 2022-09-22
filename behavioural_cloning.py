@@ -97,7 +97,7 @@ def behavioural_cloning_train(data_dir, in_model, in_weights, out_weights):
         batch_size=BATCH_SIZE,
         n_epochs=EPOCHS,
     )
-    agent, original_policy, optimizer, training_dataloader = accelerator.prepare(agent,original_policy, optimizer, training_dataloader)
+    agent, original_policy, optimizer, data_loader = accelerator.prepare(agent,original_policy, optimizer, data_loader)
     start_time = time.time()
 
     # Keep track of the hidden state per episode/trajectory.
