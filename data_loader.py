@@ -322,7 +322,20 @@ class DataLoader:
         return batch_frames, batch_actions, batch_episode_id
 
     def __del__(self):
-        self.quit_workers_event.set()
-        for process in self.processes:
-            process.terminate()
-            process.join()
+        try:
+            self
+        except:
+            print("no self")
+            return
+        
+        try:
+            self.quit_workers_event.set()
+        except:
+            print("No quit_workers_event")
+        
+        try:
+            for process in self.processes:
+                process.terminate()
+                process.join()
+        except:
+            print("No processes in self")
