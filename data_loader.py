@@ -266,7 +266,7 @@ class DataLoader:
         
         print("num workers",n_workers)
         print("demonstration_tuples",len(demonstration_tuples))
-        assert n_workers <= len(demonstration_tuples), f"n_workers should be lower or equal than number of demonstrations {len(demonstration_tuples)}"
+        assert n_workers <= len(demonstration_tuples), f"n_workers should be lower or equal than number of demonstrations {len(demonstration_tuples)}, this is likely due to training data being to little for the settings"
 
         # Repeat dataset for n_epochs times, shuffling the order for
         # each epoch
@@ -324,20 +324,7 @@ class DataLoader:
         return batch_frames, batch_actions, batch_episode_id
 
     def __del__(self):
-        try:
-            self
-        except:
-            print("no self")
-            return
-        
-        try:
-            self.quit_workers_event.set()
-        except:
-            print("No quit_workers_event")
-        
-        try:
-            for process in self.processes:
-                process.terminate()
-                process.join()
-        except:
-            print("No processes in self")
+        self.quit_workers_event.set()
+        for process in self.processes:
+            process.terminate()
+            process.join()

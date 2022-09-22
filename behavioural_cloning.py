@@ -3,7 +3,6 @@
 #       to perform training.
 #       This will fit inside even smaller GPUs (tested on 8GB one),
 #       but is slow.
-
 from argparse import ArgumentParser
 import pickle
 import time
@@ -16,6 +15,10 @@ import numpy as np
 from openai_vpt.agent import PI_HEAD_KWARGS, MineRLAgent
 from data_loader import DataLoader
 from openai_vpt.lib.tree_util import tree_map
+
+from accelerate import Accelerator
+
+accelerator = Accelerator()
 
 # Originally this code was designed for a small dataset of ~20 demonstrations per task.
 # The settings might not be the best for the full BASALT dataset (thousands of demonstrations).
@@ -94,7 +97,7 @@ def behavioural_cloning_train(data_dir, in_model, in_weights, out_weights):
         batch_size=BATCH_SIZE,
         n_epochs=EPOCHS,
     )
-
+    agent, original_policy, optimizer, training_dataloader = accelerator.prepare(agent,original_policy, optimizer, training_dataloader)
     start_time = time.time()
 
     # Keep track of the hidden state per episode/trajectory.
@@ -151,7 +154,8 @@ def behavioural_cloning_train(data_dir, in_model, in_weights, out_weights):
             # Remember to take mean over batch losses
             loss = (-log_prob + KL_LOSS_WEIGHT * kl_div) / BATCH_SIZE
             batch_loss += loss.item()
-            loss.backward()
+            # loss.backward()
+            accelerator.backward(loss)
 
         th.nn.utils.clip_grad_norm_(trainable_parameters, MAX_GRAD_NORM)
         optimizer.step()
