@@ -33,8 +33,7 @@ BATCH_SIZE = 64 if USING_FULL_DATASET else 16
 # get a bunch of consecutive samples)
 # Decrease this (and batch_size) if you run out of memory
 #N_WORKERS = 100 if USING_FULL_DATASET else 20
-N_WORKERS=1
-BATCH_SIZE=1
+N_WORKERS=BATCH_SIZE
 DEVICE = "cuda"
 
 LOSS_REPORT_RATE = 100
