@@ -263,7 +263,9 @@ class DataLoader:
             video_path = os.path.abspath(os.path.join(dataset_dir, unique_id + ".mp4"))
             json_path = os.path.abspath(os.path.join(dataset_dir, unique_id + ".jsonl"))
             demonstration_tuples.append((video_path, json_path))
-
+        
+        print("num workers",n_workers)
+        print("demonstration_tuples",len(demonstration_tuples))
         assert n_workers <= len(demonstration_tuples), f"n_workers should be lower or equal than number of demonstrations {len(demonstration_tuples)}"
 
         # Repeat dataset for n_epochs times, shuffling the order for
